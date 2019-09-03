@@ -1,6 +1,6 @@
 import {
   ADD_CONTACT,
-  DELTE_CONTACT,
+  DELETE_CONTACT,
   SET_ALERT,
   CLEAR_CURRENT,
   UPDATE_CURRENT,
@@ -14,6 +14,13 @@ export default (state, action) => {
       return {
         ...state, //spread operator current state
         contacts: [...state.contacts, action.payload]
+      };
+    case DELETE_CONTACT:
+      return {
+        ...state, //spread operator current state
+        contacts: state.contacts.filter(
+          contact => contact.id !== action.payload
+        )
       };
     default:
       return state;
