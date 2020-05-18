@@ -11,16 +11,16 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
-  CLEAR_ERRORS
+  CLEAR_ERRORS,
 } from '../types';
 
-const AuthState = props => {
+const AuthState = (props) => {
   const initalState = {
     token: localStorage.getItem('token'),
     isAuthenticated: null,
     loading: true,
     user: null,
-    error: null
+    error: null,
   };
 
   const [state, dispatch] = useReducer(authReducer, initalState);
@@ -41,30 +41,50 @@ const AuthState = props => {
   };
 
   // Register User
-  const register = async formData => {
+  const register = async (formData) => {
     const config = {
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     };
     try {
       const res = await axios.post('/api/users', formData, config);
 
       dispatch({
         type: REGISTER_SUCCESS,
-        payload: res.data
+        payload: res.data,
       });
       loadUser();
     } catch (err) {
       dispatch({
         type: REGISTER_FAIL,
-        payload: err.response.data.msg
+        payload: err.response.data.msg,
       });
     }
   };
 
   // Login User
-  const login = () => console.log('Login User');
+  const login = async (formData) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    try {
+      const res = await axios.post('/api/auth', formData, config);
+
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: res.data,
+      });
+      loadUser();
+    } catch (err) {
+      dispatch({
+        type: LOGIN_FAIL,
+        payload: err.response.data.msg,
+      });
+    }
+  };
 
   // Logout
   const logout = () => console.log('Logout User');
@@ -72,7 +92,7 @@ const AuthState = props => {
   // Clear Errors
   const clearErrors = () =>
     dispatch({
-      type: CLEAR_ERRORS
+      type: CLEAR_ERRORS,
     });
 
   return (
@@ -87,7 +107,7 @@ const AuthState = props => {
         loadUser,
         login,
         logout,
-        clearErrors
+        clearErrors,
       }}
     >
       {props.children}
